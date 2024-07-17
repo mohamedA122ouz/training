@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANANA</title>
+</head>
+<body>
+    <input placeholder="add username" type="text"/>
+    <button type="button" onclick="name11()">register username</button>
+    <button type="button" onclick="count()">count</button>
+    <button type="button" onclick="show()">show groups</button>
+    <textarea name="" id="user"></textarea>
+    <script>
+        let username = "";
+        async function callServer(endpoint,username){
+            let data = await fetch(`${location.origin}/${endpoint}?name=${username}`);
+            data = await data.json();
+            console.log(data);
+            return data
+        }
+        async function functionallity(endpoint){
+            username = document.querySelector("input").value;
+            callServer(endpoint,username);
+        }
+        async function name11(){
+            functionallity("name");
+        }
+        async function count(){
+            functionallity("count");
+        }
+        async function show(){
+            let data = await functionallity("show").then((res)=>{
+                console.log("data");
+                document.querySelector("#user").value = res;
+            });
+            document.querySelector("#user").value = data;
+            
+        }
+    </script>
+</body>
+</html>
