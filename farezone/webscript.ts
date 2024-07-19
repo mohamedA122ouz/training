@@ -1,3 +1,4 @@
+import { application } from "express";
 import Cars from "./cars";
 import { Customer } from "./persons";
 
@@ -11,5 +12,7 @@ let object:body ={
     user:{name:name?.textContent,password:password?.textContent}
 };
 fetch(`${location.origin}/login`,{
-    body:
+    body:JSON.stringify(object),
+    method:"POST",
+    headers:{"content-type":"application/json"}
 })
