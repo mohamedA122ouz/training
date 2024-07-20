@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function fetchData(url, method, data) {
+            if (method === "GET") {
+                return fetch(url);
+            }
+            else if (method === "POST") {
+                return fetch(url, {
+                    body: JSON.stringify(data),
+                    headers: { "content-type": "application/json" },
+                    method: method
+                });
+            }
+        }
+        </script>
+</head>
+
+<body>
+    <div class="list">
+        
+    </div>
+    <script>
+        fetchData("http://localhost:5000/list","GET").then(res=>res.json()).then(res=>{
+            let i = []
+            let list =document.querySelector(".list");
+            res.forEach(el=>{
+                list.innerHTML += `<input type="checkbox"/>${el}`;
+            })
+        });
+        
+    </script>
+</body>
+
+</html>
