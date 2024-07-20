@@ -1,1 +1,1 @@
-{"Admin":{"name":"admin","password":"admin"},"users":[{"name":"user","password":"user1"}],"cars":[{"model":"user1","name":"user","date":"2024-07-17"},{"model":"user1","name":"user","date":"2024-07-17"}]}
+{"Admin":{"name":"admin","password":"admin"},"users":[{"name":"user","password":"user1","suggestedCars":[{"model":"dodge","name":"speed1","date":"2024-07-17"}]}],"cars":[{"model":"dodge","name":"speed1","date":"2024-07-17"},{"model":"user1","name":"user","date":"2024-07-17"}]}

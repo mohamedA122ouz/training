@@ -128,14 +128,21 @@ app.get("/insercar", (req, res) => {
     res.sendFile(path.join(__dirname, "./cars.html"));
 })
 app.post("/assign", (req, res) => {
-    let { cars }: body = req.body;//{cars:{...},index:userIndex(number)}
-    let i: body = { cars: req.body }
-    if (!cars) {
-        ({ cars } = i);
-    }
-    let user = req.body.index;
-    currentObject.users[user].assignSuggestedCars([cars ?? new Cars("", "", new Date())]);
+    readObject();
+    let user = parseInt(req.body.useri);
+    let car = parseInt(req.body.cari);
+    currentObject.users[user]["suggestedCars"] = ([...(currentObject.users[user]["suggestedCars"]??[]),currentObject.cars[car]]);
     saveObject(currentObject);
     readObject();
     res.status(200);
+    res.sendFile(path.join(__dirname, "./assignCar.html"));
 });
+app.get("/userandcars", (req, res) => {
+    readObject();
+    res.status(200);
+    res.json({cars:currentObject.cars,users:currentObject.users});
+});
+app.get("/assigncar",(req,res)=>{
+    res.status(200);
+    res.sendFile(path.join(__dirname, "./assignCar.html"));
+})
