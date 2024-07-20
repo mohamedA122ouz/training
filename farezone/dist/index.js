@@ -126,14 +126,22 @@ app.get("/insercar", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "./cars.html"));
 });
 app.post("/assign", (req, res) => {
-    let { cars } = req.body; //{cars:{...},index:userIndex(number)}
-    let i = { cars: req.body };
-    if (!cars) {
-        ({ cars } = i);
-    }
-    let user = req.body.index;
-    currentObject.users[user].assignSuggestedCars([cars !== null && cars !== void 0 ? cars : new cars_1.default("", "", new Date())]);
+    var _a;
+    readObject();
+    let user = parseInt(req.body.useri);
+    let car = parseInt(req.body.cari);
+    currentObject.users[user]["suggestedCars"] = ([...((_a = currentObject.users[user]["suggestedCars"]) !== null && _a !== void 0 ? _a : []), currentObject.cars[car]]);
     saveObject(currentObject);
     readObject();
     res.status(200);
+    res.sendFile(path_1.default.join(__dirname, "./assignCar.html"));
+});
+app.get("/userandcars", (req, res) => {
+    readObject();
+    res.status(200);
+    res.json({ cars: currentObject.cars, users: currentObject.users });
+});
+app.get("/assigncar", (req, res) => {
+    res.status(200);
+    res.sendFile(path_1.default.join(__dirname, "./assignCar.html"));
 });
