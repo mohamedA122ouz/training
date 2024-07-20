@@ -10,6 +10,12 @@
 <body>
     <form action="http://localhost:5000/insertuser" method="post">
         <input type="text" name="name" class="name" placeholder="username" required>
+        <select class="user">
+            
+        </select>
+        <select class="car">
+            
+        </select>
         <input type="text" name="password" class="password" placeholder="password" required>
         <button type="submit">Submit</button>
     </form>
@@ -37,7 +43,7 @@
             };
             return object;
         }
-
+        fetchData("http://localhost:5000")
     </script>
 </body>
 

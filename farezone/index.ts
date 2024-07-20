@@ -30,13 +30,15 @@ try {
 } catch (ex) {
     readObject();
 }
-function insertCar(name:string,model:string,date:Date){
-    let car = new Cars(model,name,date);
+function insertCar(name: string, model: string, date: Date) {
+    let car = new Cars(model, name, date);
+    readObject();
     currentObject.cars.push(car);
     saveObject(currentObject);
 }
-function insertCustomer(name:string,password:string){
-    let user = new Customer(name,password);
+function insertCustomer(name: string, password: string) {
+    let user = new Customer(name, password);
+    readObject();
     currentObject.users.push(user);
     saveObject(currentObject);
 }
@@ -55,9 +57,9 @@ export interface body {
 app.post("/login", (req: Request, res: Response) => {
     readObject()
     let { user }: body = req.body;
-    let i:body = {user:req.body}
+    let i: body = { user: req.body }
     if (!user) {
-        ({user} = i);
+        ({ user } = i);
     }
     if (user && user.name === "admin") {
         if (currentObject.Admin.name === user.name) {
@@ -72,7 +74,7 @@ app.post("/login", (req: Request, res: Response) => {
     else {
         let index = -1;
         currentObject.users.forEach((el, i) => {
-            if (el.name === (user??{name:""}).name) {
+            if (el.name === (user ?? { name: "" }).name) {
                 index = i;
             }
         });
@@ -102,32 +104,37 @@ app.get("/list", (req, res) => {
         res.status(403);
     }
 });
-app.post("/insertuser",(req,res)=>{
+app.post("/insertuser", (req, res) => {
     let { user }: body = req.body;
-    let i:body = {user:req.body}
+    let i: body = { user: req.body }
     if (!user) {
-        ({user} = i);
+        ({ user } = i);
     }
-    insertCustomer((user??{name:""}).name,(user??{password:""}).password);
+    insertCustomer((user ?? { name: "" }).name, (user ?? { password: "" }).password);
     res.status(200);
 });
-app.post("/insertcar",(req,res)=>{
+app.post("/insertcar", (req, res) => {
     let { cars }: body = req.body;
-    let i:body = {cars:req.body}
+    let i: body = { cars: req.body }
     if (!cars) {
-        ({cars} = i);
+        ({ cars } = i);
     }
-    insertCar((cars??{name:""}).name,(cars??{model:""}).model,(cars??{date:new Date()}).date);
+    insertCar((cars ?? { name: "" }).name, (cars ?? { model: "" }).model, (cars ?? { date: new Date() }).date);
     res.status(200);
+    res.sendFile(path.join(__dirname, "./cars.html"));
 });
-app.post("/assign",(req,res)=>{
+app.get("/insercar", (req, res) => {
+    res.status(200);
+    res.sendFile(path.join(__dirname, "./cars.html"));
+})
+app.post("/assign", (req, res) => {
     let { cars }: body = req.body;//{cars:{...},index:userIndex(number)}
-    let i:body = {cars:req.body}
+    let i: body = { cars: req.body }
     if (!cars) {
-        ({cars} = i);
+        ({ cars } = i);
     }
     let user = req.body.index;
-    currentObject.users[user].assignSuggestedCars([cars??new Cars("","",new Date())]);
+    currentObject.users[user].assignSuggestedCars([cars ?? new Cars("", "", new Date())]);
     saveObject(currentObject);
     readObject();
     res.status(200);
