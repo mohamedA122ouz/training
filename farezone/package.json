@@ -3,6 +3,7 @@
     "nodemon": "nodemon ./dist/index.js"
   },
   "dependencies": {
+    "@types/cookie-parser": "^1.4.7",
     "express": "^4.19.2",
     "nodemon": "^3.1.4",
     "typescript": "^5.5.3"

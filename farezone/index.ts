@@ -31,7 +31,7 @@ try{
 }
 const app: Application = express();
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
 let port: number = 5000;
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
@@ -40,11 +40,6 @@ export interface body {
     user: Customer;
     cars?: Cars[];
 }
-app.get("/login", (req: Request, res: Response) => {
-    res.cookie("token","user123");
-    res.status(200);
-    res.send("done");
-});
 app.post("/login", (req: Request, res: Response) => {
     let { user }: body = req.body;
     if(currentObject.Admin.name === user.name){
@@ -52,12 +47,7 @@ app.post("/login", (req: Request, res: Response) => {
             res.cookie("token","user123");
         }
     }
-
 });
-app.get("/admin", (req: Request, res: Response) => {
-    console.log(req.cookies["token"]);
-    if (req.cookies) {
-        let { user, cars }: body = req.body;
-        user.suggestedCars = cars;
-    }
-});
+app.get("/home",(req,res)=>{
+    res.sendFile(path.join(__dirname,"./login.html"));
+})
