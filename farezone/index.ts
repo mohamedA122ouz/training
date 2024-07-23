@@ -92,7 +92,7 @@ export interface body {
 //     }
 // });
 app.post("/login", async (req: Request, res: Response) => {
-    readObject()
+    // readObject()
     let { user }: body = req.body;
     let i: body = { user: req.body }
     if (!user) {
@@ -109,7 +109,11 @@ app.post("/login", async (req: Request, res: Response) => {
         if (index === -1) {
             res.status(200);
             res.sendFile(path.join(__dirname, "./insertUsers.html"));
-        } else {
+        } else if(currentUser[0].isFirstTime){
+            res.status(200);
+            res.sendFile(path.join(__dirname, "./resetPassword.html"));
+        } 
+        else {
             res.status(200);
             res.sendFile(path.join(__dirname, "./listData.html"));
         }
@@ -216,4 +220,15 @@ app.get("/assigncar", (req, res) => {
         res.status(403);
         res.send(`<h1>not allowed</h1>`);
     }
+});
+app.get("/changePassword", (req, res) => {
+    res.status(200);
+    res.sendFile(path.join(__dirname, "./resetPassword.html"));
+});
+app.post("/changePassword", (req, res) => {
+    let userIndex = req.cookies["userIndex"];
+    let newPassword = req.body.password;
+    database.changePassword(userIndex,newPassword);
+    res.status(200);
+    res.sendFile(path.join(__dirname, "./login.html"));
 });

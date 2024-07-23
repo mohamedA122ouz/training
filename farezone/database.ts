@@ -80,6 +80,11 @@ class database{
         let statement = "INSERT suggestedcars(uId,cId,uniqueHelper) VALUES(?,?,?)";
         await this.executeQuery(statement,[uId,cId,`${uId}${cId}`]);
     }
+    static async changePassword(uId:number,password:string){
+        let statement = "CALL changePassByUser(?,?)";
+        let hashedPassword = generate(password);
+        await this.executeQuery(statement,[hashedPassword,uId]);
+    }
 }
 interface user{
     id:number;
