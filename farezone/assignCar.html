@@ -45,11 +45,11 @@
             let users = document.querySelector(".user")
             let cars = document.querySelector(".car")
             let arr = res.cars.map((el, i) => {
-                return `<option value=${i}>${el.name}</option>`;
+                return `<option value=${el.id}>${el.name}</option>`;
             });
             cars.innerHTML = arr.join('');
             arr = res.users.map((el, i) => {
-                return `<option value=${i}>${el.name}</option>`;
+                return `<option value=${el.id}>${el.name}</option>`;
             });
             users.innerHTML = arr.join('');
 

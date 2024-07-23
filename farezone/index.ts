@@ -4,6 +4,7 @@ import Cars from "./cars";
 import { Person, Customer, Admin, saveStructure } from "./persons";
 import path from "path";
 import fs from "fs";
+import database from "./database";
 
 let currentObject: saveStructure;
 const filePath = path.join(__dirname, "./file.json");
@@ -54,40 +55,69 @@ export interface body {
     user?: Customer;
     cars?: Cars;
 }
-app.post("/login", (req: Request, res: Response) => {
+// app.post("/login", (req: Request, res: Response) => {
+//     readObject()
+//     let { user }: body = req.body;
+//     let i: body = { user: req.body }
+//     if (!user) {
+//         ({ user } = i);
+//     }
+//     if (user && user.name === "admin") {
+//         if (currentObject.Admin.name === user.name) {
+//             if (currentObject.Admin.name == user.password) {
+//                 res.cookie("userType", "admin");
+//                 res.cookie("userIndex", "-1");
+//                 res.status(200);
+//                 res.sendFile(path.join(__dirname, "./insertUsers.html"));
+//             }
+//         }
+//     }
+//     else {
+//         let index = -2;
+//         currentObject.users.forEach((el, i) => {
+//             if (el.name === (user ?? { name: "" }).name) {
+//                 index = i;
+//                 res.cookie("userType", "user");
+//                 res.cookie("userIndex", index);
+//                 res.status(200);
+//                 res.sendFile(path.join(__dirname, "./listData.html"));
+//             }
+//         });
+//         if (index === -2) {
+//             res.clearCookie("userType");
+//             res.clearCookie("userIndex");
+//             res.status(404);
+//             res.send(`<h1>user not found 404</h1>`);
+//         }
+//     }
+// });
+app.post("/login", async (req: Request, res: Response) => {
     readObject()
     let { user }: body = req.body;
     let i: body = { user: req.body }
     if (!user) {
         ({ user } = i);
     }
-    if (user && user.name === "admin") {
-        if (currentObject.Admin.name === user.name) {
-            if (currentObject.Admin.name == user.password) {
-                res.cookie("userType", "admin");
-                res.cookie("userIndex", "-1");
-                res.status(200);
-                res.sendFile(path.join(__dirname, "./insertUsers.html"));
-            }
+    if (await database.login((user ?? { name: "" }).name, (user ?? { password: "" }).password)) {
+        let currentUser = await database.getUserByName((user ?? { name: "" }).name);
+        let index = currentUser[0].id;
+        if (currentUser[0].isAdmin === 1) {
+            index = -1;
         }
-    }
-    else {
-        let index = -2;
-        currentObject.users.forEach((el, i) => {
-            if (el.name === (user ?? { name: "" }).name) {
-                index = i;
-                res.cookie("userType", "user");
-                res.cookie("userIndex", index);
-                res.status(200);
-                res.sendFile(path.join(__dirname, "./listData.html"));
-            }
-        });
-        if (index === -2) {
-            res.clearCookie("userType");
-            res.clearCookie("userIndex");
-            res.status(404);
-            res.send(`<h1>user not found 404</h1>`);
+        res.cookie("userType", "user");
+        res.cookie("userIndex", index);
+        if (index === -1) {
+            res.status(200);
+            res.sendFile(path.join(__dirname, "./insertUsers.html"));
+        } else {
+            res.status(200);
+            res.sendFile(path.join(__dirname, "./listData.html"));
         }
+    } else {
+        res.clearCookie("userType");
+        res.clearCookie("userIndex");
+        res.status(404);
+        res.send(`<h1>user not found 404</h1>`);
     }
 });
 
@@ -97,11 +127,11 @@ app.get("/login", (req, res) => {
     res.status(200);
     res.sendFile(path.join(__dirname, "./login.html"));
 });
-app.get("/list", (req, res) => {
+app.get("/list", async (req, res) => {
     try {
-
         let index = req.cookies["userIndex"];
-        let suggestedCars = currentObject.users[index].suggestedCars;
+        // let suggestedCars = currentObject.users[index].suggestedCars;
+        let suggestedCars = await database.listSuggestedCars(index);
         res.status(200);
         res.json(suggestedCars);
     }
@@ -116,7 +146,8 @@ app.post("/insertuser", (req, res) => {
         if (!user) {
             ({ user } = i);
         }
-        insertCustomer((user ?? { name: "" }).name, (user ?? { password: "" }).password);
+        // insertCustomer((user ?? { name: "" }).name, (user ?? { password: "" }).password);
+        database.insertUser((user ?? { name: "" }).name, (user ?? { password: "" }).password);
         res.status(200);
         res.sendFile(path.join(__dirname, "./insertUsers.html"));
     }
@@ -133,11 +164,11 @@ app.post("/insertcar", (req, res) => {
         if (!cars) {
             ({ cars } = i);
         }
-        insertCar((cars ?? { name: "" }).name, (cars ?? { model: "" }).model, (cars ?? { date: new Date() }).date);
+        // insertCar((cars ?? { name: "" }).name, (cars ?? { model: "" }).model, (cars ?? { date: new Date() }).date);
+        database.insertCar((cars ?? { name: "" }).name, (cars ?? { model: "" }).model, (cars ?? { date: new Date() }).date);
         res.status(200);
         res.sendFile(path.join(__dirname, "./cars.html"));
     } else {
-
         res.status(403);
         res.send(`<h1>not allowed</h1>`);
     }
@@ -153,12 +184,13 @@ app.get("/insercar", (req, res) => {
 });
 app.post("/assign", (req, res) => {
     if (req.cookies["userIndex"] === "-1") {
-        readObject();
+        // readObject();
         let user = parseInt(req.body.useri);
         let car = parseInt(req.body.cari);
-        currentObject.users[user]["suggestedCars"] = ([...(currentObject.users[user]["suggestedCars"] ?? []), currentObject.cars[car]]);
-        saveObject(currentObject);
-        readObject();
+        // currentObject.users[user]["suggestedCars"] = ([...(currentObject.users[user]["suggestedCars"] ?? []), currentObject.cars[car]]);
+        // saveObject(currentObject);
+        // readObject();
+        database.assign(user, car);
         res.status(200);
         res.sendFile(path.join(__dirname, "./assignCar.html"));
     }
@@ -167,10 +199,14 @@ app.post("/assign", (req, res) => {
         res.send(`<h1>not allowed</h1>`);
     }
 });
-app.get("/userandcars", (req, res) => {
-    readObject();
+app.get("/userandcars", async (req, res) => {
+    // readObject();
+    let carsArr = await database.listCars();
+    let usersArr = await database.listUsers();
+    usersArr.shift();//removeing admin from the array of users
     res.status(200);
-    res.json({ cars: currentObject.cars, users: currentObject.users });
+    // res.json({ cars: currentObject.cars, users: currentObject.users });
+    res.json({ cars: carsArr, users: usersArr });
 });
 app.get("/assigncar", (req, res) => {
     if (req.cookies["userIndex"] === "-1") {
@@ -180,4 +216,4 @@ app.get("/assigncar", (req, res) => {
         res.status(403);
         res.send(`<h1>not allowed</h1>`);
     }
-})
+});

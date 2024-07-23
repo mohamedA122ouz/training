@@ -1,1 +1,118 @@
-{"Admin":{"name":"admin","password":"admin"},"users":[{"name":"user","password":"user1","suggestedCars":[{"model":"dodge","name":"speed1","date":"2024-07-17"},{"model":"veryfast","name":"speed2","date":"2024-07-02"},{"model":"veryfast3","name":"speed5","date":"2023-09-07"}]},{"name":"user2","password":"user2","suggestedCars":[{"model":"dodge","name":"speed1","date":"2024-07-17"}]},{"name":"user3","password":"user3","suggestedCars":[{"model":"veryfast4","name":"speed4","date":"2024-04-17"}]},{"name":"user4","password":"user4","suggestedCars":[{"model":"veryfast4","name":"speed4","date":"2024-04-17"}]},{"name":"user5","password":"user5"},{"name":"user6","password":"user6"},{"name":"user1","password":"user1","suggestedCars":[{"model":"dodge","name":"speed1","date":"2024-07-17"},{"model":"veryfast4","name":"speed4","date":"2024-04-17"}]}],"cars":[{"model":"dodge","name":"speed1","date":"2024-07-17"},{"model":"user1","name":"user","date":"2024-07-17"},{"model":"veryfast","name":"speed2","date":"2024-07-02"},{"model":"veryfast2","name":"speed3","date":"2024-07-06"},{"model":"veryfast4","name":"speed4","date":"2024-04-17"},{"model":"veryfast3","name":"speed5","date":"2023-09-07"}]}
+{
+    "Admin": {
+        "name": "admin",
+        "password": "admin"
+    },
+    "users": [
+        {
+            "name": "user",
+            "password": "user1",
+            "suggestedCars": [
+                {
+                    "model": "dodge",
+                    "name": "speed1",
+                    "date": "2024-07-17"
+                },
+                {
+                    "model": "veryfast",
+                    "name": "speed2",
+                    "date": "2024-07-02"
+                },
+                {
+                    "model": "veryfast3",
+                    "name": "speed5",
+                    "date": "2023-09-07"
+                }
+            ]
+        },
+        {
+            "name": "user2",
+            "password": "user2",
+            "suggestedCars": [
+                {
+                    "model": "dodge",
+                    "name": "speed1",
+                    "date": "2024-07-17"
+                }
+            ]
+        },
+        {
+            "name": "user3",
+            "password": "user3",
+            "suggestedCars": [
+                {
+                    "model": "veryfast4",
+                    "name": "speed4",
+                    "date": "2024-04-17"
+                }
+            ]
+        },
+        {
+            "name": "user4",
+            "password": "user4",
+            "suggestedCars": [
+                {
+                    "model": "veryfast4",
+                    "name": "speed4",
+                    "date": "2024-04-17"
+                }
+            ]
+        },
+        {
+            "name": "user5",
+            "password": "user5"
+        },
+        {
+            "name": "user6",
+            "password": "user6"
+        },
+        {
+            "name": "user1",
+            "password": "user1",
+            "suggestedCars": [
+                {
+                    "model": "dodge",
+                    "name": "speed1",
+                    "date": "2024-07-17"
+                },
+                {
+                    "model": "veryfast4",
+                    "name": "speed4",
+                    "date": "2024-04-17"
+                }
+            ]
+        }
+    ],
+    "cars": [
+        {
+            "model": "dodge",
+            "name": "speed1",
+            "date": "2024-07-17"
+        },
+        {
+            "model": "user1",
+            "name": "user",
+            "date": "2024-07-17"
+        },
+        {
+            "model": "veryfast",
+            "name": "speed2",
+            "date": "2024-07-02"
+        },
+        {
+            "model": "veryfast2",
+            "name": "speed3",
+            "date": "2024-07-06"
+        },
+        {
+            "model": "veryfast4",
+            "name": "speed4",
+            "date": "2024-04-17"
+        },
+        {
+            "model": "veryfast3",
+            "name": "speed5",
+            "date": "2023-09-07"
+        }
+    ]
+}
