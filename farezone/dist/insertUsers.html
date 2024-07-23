@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="http://localhost:5000/insertuser" method="post">
+        <input type="text" name="name" class="name" placeholder="username" required>
+        <input type="text" name="password" class="password" placeholder="password" required>
+        <button type="submit">inser user</button>
+    </form>
+    <form action="http://localhost:5000/assigncar" method="get">
+        <button type="submit">go to assign cars</button>
+    </form>
+    <form action="http://localhost:5000/insercar" method="get">
+        <button type="submit">go to insert car</button>
+    </form>
+    <script>
+        function fetchData(url, method, data) {
+            if (method === "GET") {
+                return fetch(url);
+            }
+            else if (method === "POST") {
+                return fetch(url, {
+                    body: JSON.stringify(data),
+                    headers: { "content-type": "application/json" },
+                    method: method
+                });
+            }
+        }
+        function getData() {
+            var name = document.querySelector(".name");
+            var password = document.querySelector(".password");
+            var object = {
+                user: { name: name === null || name === void 0 ? void 0 : name.value, password: password === null || password === void 0 ? void 0 : password.value }
+            };
+            return object;
+        }
+
+    </script>
+</body>
+
+</html>
