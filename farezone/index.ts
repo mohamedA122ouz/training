@@ -72,19 +72,24 @@ app.post("/login", (req: Request, res: Response) => {
         }
     }
     else {
-        let index = -1;
+        let index = -2;
         currentObject.users.forEach((el, i) => {
             if (el.name === (user ?? { name: "" }).name) {
                 index = i;
+                res.cookie("userType", "user");
+                res.cookie("userIndex", index);
+                res.status(200);
+                res.sendFile(path.join(__dirname, "./listData.html"));
             }
         });
-        res.cookie("userType", "user");
-        res.cookie("userIndex", index);
-        res.status(200);
-        res.sendFile(path.join(__dirname, "./listData.html"));
+        if (index === -2) {
+            res.clearCookie("userType");
+            res.clearCookie("userIndex");
+            res.status(404);
+            res.send(`<h1>user not found 404</h1>`);
+        }
     }
 });
-
 
 
 ///front end controller
@@ -105,44 +110,74 @@ app.get("/list", (req, res) => {
     }
 });
 app.post("/insertuser", (req, res) => {
-    let { user }: body = req.body;
-    let i: body = { user: req.body }
-    if (!user) {
-        ({ user } = i);
+    if (req.cookies["userIndex"] === "-1") {
+        let { user }: body = req.body;
+        let i: body = { user: req.body }
+        if (!user) {
+            ({ user } = i);
+        }
+        insertCustomer((user ?? { name: "" }).name, (user ?? { password: "" }).password);
+        res.status(200);
+        res.sendFile(path.join(__dirname, "./insertUsers.html"));
     }
-    insertCustomer((user ?? { name: "" }).name, (user ?? { password: "" }).password);
-    res.status(200);
+    else {
+
+        res.status(403);
+        res.send(`<h1>not allowed</h1>`);
+    }
 });
 app.post("/insertcar", (req, res) => {
-    let { cars }: body = req.body;
-    let i: body = { cars: req.body }
-    if (!cars) {
-        ({ cars } = i);
+    if (req.cookies["userIndex"] === "-1") {
+        let { cars }: body = req.body;
+        let i: body = { cars: req.body }
+        if (!cars) {
+            ({ cars } = i);
+        }
+        insertCar((cars ?? { name: "" }).name, (cars ?? { model: "" }).model, (cars ?? { date: new Date() }).date);
+        res.status(200);
+        res.sendFile(path.join(__dirname, "./cars.html"));
+    } else {
+
+        res.status(403);
+        res.send(`<h1>not allowed</h1>`);
     }
-    insertCar((cars ?? { name: "" }).name, (cars ?? { model: "" }).model, (cars ?? { date: new Date() }).date);
-    res.status(200);
-    res.sendFile(path.join(__dirname, "./cars.html"));
 });
 app.get("/insercar", (req, res) => {
-    res.status(200);
-    res.sendFile(path.join(__dirname, "./cars.html"));
-})
+    if (req.cookies["userIndex"] === "-1") {
+        res.status(200);
+        res.sendFile(path.join(__dirname, "./cars.html"));
+    } else {
+        res.status(403);
+        res.send(`<h1>not allowed</h1>`);
+    }
+});
 app.post("/assign", (req, res) => {
-    readObject();
-    let user = parseInt(req.body.useri);
-    let car = parseInt(req.body.cari);
-    currentObject.users[user]["suggestedCars"] = ([...(currentObject.users[user]["suggestedCars"]??[]),currentObject.cars[car]]);
-    saveObject(currentObject);
-    readObject();
-    res.status(200);
-    res.sendFile(path.join(__dirname, "./assignCar.html"));
+    if (req.cookies["userIndex"] === "-1") {
+        readObject();
+        let user = parseInt(req.body.useri);
+        let car = parseInt(req.body.cari);
+        currentObject.users[user]["suggestedCars"] = ([...(currentObject.users[user]["suggestedCars"] ?? []), currentObject.cars[car]]);
+        saveObject(currentObject);
+        readObject();
+        res.status(200);
+        res.sendFile(path.join(__dirname, "./assignCar.html"));
+    }
+    else {
+        res.status(403);
+        res.send(`<h1>not allowed</h1>`);
+    }
 });
 app.get("/userandcars", (req, res) => {
     readObject();
     res.status(200);
-    res.json({cars:currentObject.cars,users:currentObject.users});
+    res.json({ cars: currentObject.cars, users: currentObject.users });
 });
-app.get("/assigncar",(req,res)=>{
-    res.status(200);
-    res.sendFile(path.join(__dirname, "./assignCar.html"));
+app.get("/assigncar", (req, res) => {
+    if (req.cookies["userIndex"] === "-1") {
+        res.status(200);
+        res.sendFile(path.join(__dirname, "./assignCar.html"));
+    } else {
+        res.status(403);
+        res.send(`<h1>not allowed</h1>`);
+    }
 })

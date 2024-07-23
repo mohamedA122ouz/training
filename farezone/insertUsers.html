@@ -11,11 +11,14 @@
     <form action="http://localhost:5000/insertuser" method="post">
         <input type="text" name="name" class="name" placeholder="username" required>
         <input type="text" name="password" class="password" placeholder="password" required>
-        <button type="submit">Submit</button>
+        <button type="submit">inser user</button>
     </form>
-        <!-- <input type="text" name="name" class="name" placeholder="username">
-        <input type="text" name="password" class="password" placeholder="password">
-        <button onclick='fetchData(location.origin+"/login", "POST", getData())'>submit</button> -->
+    <form action="http://localhost:5000/assigncar" method="get">
+        <button type="submit">go to assign cars</button>
+    </form>
+    <form action="http://localhost:5000/insercar" method="get">
+        <button type="submit">go to insert car</button>
+    </form>
     <script>
         function fetchData(url, method, data) {
             if (method === "GET") {
